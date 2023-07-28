@@ -1,10 +1,19 @@
-import { DataTypes } from "sequelize";
+import bcrypt from "bcrypt";
+import { DataTypes, Model } from "sequelize";
 import { database } from "../database";
 import { List } from "./list";
-import bcrypt from "bcrypt"
 
-export const User = database.define(
-  "User",
+class User extends Model {
+  public id!: string;
+  public first_name!: string;
+  public last_name!: string;
+  public email!: string;
+  public password!: string;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
+
+User.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -14,43 +23,35 @@ export const User = database.define(
     first_name: {
       type: DataTypes.STRING,
       allowNull: false,
-
     },
     last_name: {
       type: DataTypes.STRING,
       allowNull: false,
-
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isEmail: true
-      }
+        isEmail: true,
+      },
     },
     password: {
       type: DataTypes.STRING,
       async set(value: string) {
-          this.setDataValue('password', bcrypt.hashSync(value, 10));
-      }
-  } ,
-    lists: {
-      type: DataTypes.ARRAY(DataTypes.JSONB), 
-      defaultValue: [], 
-    }
-    
-    
+        this.setDataValue("password", bcrypt.hashSync(value, 10));
+      },
+    },
+  },
+  {
+    sequelize: database,
+    modelName: "User",
+    tableName: "user",
+    createdAt: false,
+    updatedAt: false,
   }
-,
-  { tableName: "user", createdAt: false, updatedAt: false }
 );
-
 User.hasMany(List, {
-  foreignKey: 'userId',
-  as: 'userLists', 
+  foreignKey: "userId",
+  as: "list",
 });
-
-List.belongsTo(User, {
-  foreignKey: 'userId',
-  as: 'user',
-});
+export { User };
