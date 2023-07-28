@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { database } from "../database";
 import { List } from "./list";
+import bcrypt from "bcrypt"
 
 export const User = database.define(
   "User",
@@ -12,12 +13,12 @@ export const User = database.define(
     },
     first_name: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
 
     },
     last_name: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
 
     },
     email: {
@@ -27,10 +28,12 @@ export const User = database.define(
         isEmail: true
       }
     },
-    password:{
-      type:DataTypes.STRING,
-      allowNull: true,
-    },
+    password: {
+      type: DataTypes.STRING,
+      async set(value: string) {
+          this.setDataValue('password', bcrypt.hashSync(value, 10));
+      }
+  } ,
     lists: {
       type: DataTypes.ARRAY(DataTypes.JSONB), 
       defaultValue: [], 

@@ -17,7 +17,7 @@ export const List = database.define(
     },
     amount: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     
     },
   },
