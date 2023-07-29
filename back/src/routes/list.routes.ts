@@ -5,10 +5,24 @@ import {
   findItemIdController,
   updateItemListController,
 } from "../controllers/list.controller";
+import { verifyTokenValidationMiddleware } from "../middlewares/autToken.middleware";
+import { verifyPatchAndDeleteMiddleware } from "../middlewares/updateAndDelete.middleware";
 
 export const listRouter = Router();
 
-listRouter.post("/:id", crateItemListController);
-listRouter.patch("/:id", updateItemListController);
-listRouter.get("/:id", findItemIdController);
-listRouter.delete("/:id", deleteItemIdController)
+listRouter.post(
+  "/:id",
+  verifyTokenValidationMiddleware,
+  crateItemListController
+);
+listRouter.patch(
+  "/:id",
+  verifyTokenValidationMiddleware,verifyPatchAndDeleteMiddleware,
+  updateItemListController
+);
+listRouter.get("/:id", verifyTokenValidationMiddleware, findItemIdController);
+listRouter.delete(
+  "/:id",
+  verifyTokenValidationMiddleware,verifyPatchAndDeleteMiddleware,
+  deleteItemIdController
+);

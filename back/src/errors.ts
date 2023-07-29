@@ -26,7 +26,7 @@ const handleError = (
   if (err instanceof ValidationError) {
     return res.status(400).json({ message: err.errors })
   }
-
+  console.log(err)
   return res.status(500).send({ message: err.message })
 }
 
