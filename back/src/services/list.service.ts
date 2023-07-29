@@ -11,7 +11,7 @@ export async function addItemToList(userId: string, newItem: Partial<iList>) {
   const IdUser = await User.findByPk(userId);
 
   if (!IdUser) {
-    throw new Error("User not found");
+    throw new AppError("User not found");
   }
   const newList = await List.create({
     ...newItem,
@@ -38,7 +38,7 @@ export async function findItensId(idItens: string) {
   const findIdItem = await List.findByPk(idItens);
 
   if (!findIdItem) {
-    throw new Error("Item not found");
+    throw new AppError("Item not found");
   }
 
   return findIdItem;
