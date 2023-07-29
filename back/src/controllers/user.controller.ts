@@ -11,7 +11,7 @@ export async function createUserController(req: Request, res: Response) {
   const newUser = await addUser(req.body);
   res.status(201).json(newUser);
 }
-
+''
 export async function findUserController(req: Request, res: Response) {
   const user = await findUser();
   res.status(200).json(user);

@@ -1,3 +1,4 @@
+import { AppError } from "../errors";
 import { User } from "../models/User";
 import { List } from "../models/list";
 
@@ -20,12 +21,13 @@ export async function addItemToList(userId: string, newItem: Partial<iList>) {
   return newList;
 }
 
-export async function updateItemList(idItem: string, newItem: Partial<iList>) {
+export async function updateItemList(idItem: string,newItem: Partial<iList>) {
   const idList = await List.findByPk(idItem);
 
   if (!idList) {
-    throw new Error("Item not found");
+    throw new AppError("Item not found");
   }
+
 
   await idList.update(newItem);
 
